@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear PR Status</title>
+    <style>
+        body {
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+            padding: 16px;
+            margin: 0;
+        }
+
+        .status-container {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .status-container.success {
+            background-color: #dff6dd;
+            border: 1px solid #107c10;
+        }
+
+        .status-container.warning {
+            background-color: #fff4ce;
+            border: 1px solid #ffb900;
+        }
+
+        .status-container.error {
+            background-color: #fde7e9;
+            border: 1px solid #a80000;
+        }
+
+        .status-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .work-items {
+            margin-top: 8px;
+        }
+
+        .work-item {
+            padding: 8px;
+            background-color: white;
+            border-radius: 2px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .work-item-link {
+            color: #0078d4;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .work-item-link:hover {
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #605e5c;
+        }
+    </style>
+</head>
+<body>
+    <div id="status-content">
+        <div class="loading">Validating Linear work items...</div>
+    </div>
+
+    <script src="pr-status.js"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Check-in Policy</title>
+    <style>
+        body {
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+            padding: 16px;
+            margin: 0;
+        }
+
+        .policy-result {
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .policy-result.passed {
+            background-color: #dff6dd;
+            border: 1px solid #107c10;
+            color: #107c10;
+        }
+
+        .policy-result.failed {
+            background-color: #fde7e9;
+            border: 1px solid #a80000;
+            color: #a80000;
+        }
+
+        .policy-result h3 {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+        }
+
+        .policy-result ul {
+            margin: 8px 0 0 0;
+            padding-left: 20px;
+        }
+
+        .policy-result li {
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #605e5c;
+        }
+    </style>
+</head>
+<body>
+    <div id="policy-status">
+        <div class="loading">Validating commits...</div>
+    </div>
+
+    <script src="checkin-policy.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+{
+    "manifestVersion": 1,
+    "id": "linear-azure-devops-integration",
+    "name": "Linear Integration for Azure DevOps",
+    "version": "1.0.0",
+    "publisher": "Asahajit Dalui",
+    "description": "Link Linear work items to Azure Repos commits and validate references during pull requests and check-ins",
+    "categories": [
+        "Azure Repos",
+        "Azure Boards"
+    ],
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],
+    "icons": {
+        "default": "images/logo.png"
+    },
+    "content": {
+        "details": {
+            "path": "README.md"
+        }
+    },
+    "links": {
+        "getstarted": {
+            "uri": "https://github.com/asahajit/linear-azuredevops-sync"
+        },
+        "support": {
+            "uri": "https://github.com/asahajit/linear-azuredevops-sync/issues"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/asahajit/linear-azuredevops-sync"
+    },
+    "scopes": [
+        "vso.code",
+        "vso.code_write",
+        "vso.settings"
+    ],
+    "contributions": [
+        {
+            "id": "linear-pr-status",
+            "type": "ms.vss-code-web.pull-request-status-provider",
+            "description": "Validates Linear work item references in pull requests",
+            "targets": [
+                "ms.vss-code-web.pull-request-status-provider"
+            ],
+            "properties": {
+                "uri": "dist/pr-status.html"
+            }
+        },
+        {
+            "id": "linear-checkin-policy",
+            "type": "ms.vss-code-web.policy-type",
+            "description": "Enforces Linear work item references in commits",
+            "targets": [
+                "ms.vss-code-web.policy-type"
+            ],
+            "properties": {
+                "displayName": "Linear Work Item Check",
+                "description": "Ensures commits reference valid Linear work items",
+                "uri": "dist/checkin-policy.html"
+            }
+        },
+        {
+            "id": "linear-settings-hub",
+            "type": "ms.vss-web.hub",
+            "description": "Configuration settings for Linear integration",
+            "targets": [
+                "ms.vss-web.project-admin-hub-group"
+            ],
+            "properties": {
+                "name": "Linear Integration",
+                "uri": "dist/settings.html",
+                "iconAsset": "images/logo.png",
+                "supportsMobile": true
+            }
+        }
+    ],
+    "files": [
+        {
+            "path": "dist",
+            "addressable": true
+        },
+        {
+            "path": "images",
+            "addressable": true
+        }
+    ]
+}
