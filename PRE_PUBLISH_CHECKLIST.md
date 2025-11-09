@@ -5,12 +5,14 @@ Use this checklist before publishing your extension to the Azure DevOps Marketpl
 ## ✅ Required Steps
 
 ### 1. Extension Assets
+
 - [ ] Create extension logo (128x128 PNG)
   - Save as: `images/logo.png`
   - Use Linear and Azure DevOps brand colors
   - Tools: Figma, Canva, or any image editor
 
 ### 2. Publisher Configuration
+
 - [ ] Create publisher account at https://marketplace.visualstudio.com/manage
 - [ ] Note your publisher ID: `___________________`
 - [ ] Update `vss-extension.json`:
@@ -23,6 +25,7 @@ Use this checklist before publishing your extension to the Azure DevOps Marketpl
   ```
 
 ### 3. Repository Setup
+
 - [ ] Create GitHub repository
 - [ ] Update repository URLs in:
   - `vss-extension.json` → `repository.uri`
@@ -38,6 +41,7 @@ Use this checklist before publishing your extension to the Azure DevOps Marketpl
   ```
 
 ### 4. Linear API Setup
+
 - [ ] Get Linear API key from https://linear.app/settings/api
 - [ ] Test API key works:
   ```powershell
@@ -47,6 +51,7 @@ Use this checklist before publishing your extension to the Azure DevOps Marketpl
   ```
 
 ### 5. Build Verification
+
 - [ ] Clean build:
   ```powershell
   npm run clean
@@ -60,6 +65,7 @@ Use this checklist before publishing your extension to the Azure DevOps Marketpl
   - `settings.js` and `settings.html`
 
 ### 6. Package Testing
+
 - [ ] Create package:
   ```powershell
   npm run package
@@ -68,6 +74,7 @@ Use this checklist before publishing your extension to the Azure DevOps Marketpl
 - [ ] Note file size: ~1.5-2 MB is normal
 
 ### 7. Local Testing (Recommended)
+
 - [ ] Upload `.vsix` to your Azure DevOps org:
   - Organization Settings → Extensions → Browse marketplace → "..." → Upload extension
 - [ ] Install extension in a test project
@@ -83,6 +90,7 @@ Use this checklist before publishing your extension to the Azure DevOps Marketpl
   - Try commit with valid Linear reference
 
 ### 8. Marketplace Listing
+
 - [ ] Prepare marketing materials:
   - Screenshots (at least 1)
   - Feature highlights
@@ -93,6 +101,7 @@ Use this checklist before publishing your extension to the Azure DevOps Marketpl
   - Documentation URL
 
 ### 9. Publishing
+
 - [ ] Generate Personal Access Token (PAT):
   - https://dev.azure.com → User Settings → Personal Access Tokens
   - Scope: "Marketplace (Publish)"
@@ -108,6 +117,7 @@ Use this checklist before publishing your extension to the Azure DevOps Marketpl
   Or manually upload at https://marketplace.visualstudio.com/manage
 
 ### 10. Post-Publishing
+
 - [ ] Verify extension appears in marketplace
 - [ ] Install in production Azure DevOps org
 - [ ] Test with real Linear issues
@@ -117,6 +127,7 @@ Use this checklist before publishing your extension to the Azure DevOps Marketpl
 ## 📝 Optional Enhancements
 
 ### Nice-to-Have
+
 - [ ] Add screenshots to README
 - [ ] Create animated GIF demo
 - [ ] Write blog post about the extension
@@ -125,6 +136,7 @@ Use this checklist before publishing your extension to the Azure DevOps Marketpl
 - [ ] Create video tutorial
 
 ### Future Features
+
 - [ ] Support for multiple Linear workspaces
 - [ ] Auto-link commits to Linear issues
 - [ ] Sync PR status to Linear
@@ -145,6 +157,7 @@ When you need to update the extension:
 ## 🎯 Success Criteria
 
 Your extension is ready when:
+
 - ✅ Build completes without errors
 - ✅ Package creates valid `.vsix` file
 - ✅ Extension installs in Azure DevOps
@@ -156,6 +169,7 @@ Your extension is ready when:
 ## 📞 Help & Resources
 
 **If you get stuck:**
+
 1. Check `PROJECT_SUMMARY.md` for troubleshooting
 2. Review `GETTING_STARTED.md` for setup details
 3. Read `README.md` for feature documentation
@@ -163,6 +177,7 @@ Your extension is ready when:
 5. Check [Linear API Docs](https://developers.linear.app/)
 
 **Common Issues:**
+
 - Publisher ID mismatch → Update in both config files
 - Logo not showing → Check path is `images/logo.png`
 - API connection fails → Verify Linear API key
@@ -173,6 +188,7 @@ Your extension is ready when:
 ## ✨ Final Check
 
 Before clicking "Publish":
+
 - [ ] All checklist items above completed
 - [ ] Extension tested in dev environment
 - [ ] Documentation reviewed and accurate

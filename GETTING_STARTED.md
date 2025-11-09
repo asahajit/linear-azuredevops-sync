@@ -39,6 +39,7 @@ Linear-AzureRepo-Sync/
 ### 1. Add Your Extension Logo
 
 Create a 128x128 PNG image and save it as:
+
 ```
 images/logo.png
 ```
@@ -46,6 +47,7 @@ images/logo.png
 ### 2. Update Publisher Information
 
 Edit `vss-extension.json` and `package.json` to replace:
+
 - `your-publisher-name` with your Azure DevOps publisher ID
 - Repository URLs with your actual GitHub repository
 
@@ -96,6 +98,7 @@ Or manually upload the `.vsix` file at https://marketplace.visualstudio.com/mana
 ### Pull Request Validation
 
 When a PR is created or updated, the extension:
+
 1. Extracts the PR title and description
 2. Searches for Linear issue references (e.g., `LIN-123`, `ENG-456`)
 3. Validates each reference using the Linear API
@@ -104,6 +107,7 @@ When a PR is created or updated, the extension:
 ### Check-in Policy
 
 When code is committed, the extension:
+
 1. Examines commit messages
 2. Looks for Linear issue identifiers
 3. Validates that issues exist and are accessible
@@ -112,6 +116,7 @@ When code is committed, the extension:
 ### Settings Page
 
 Provides a UI to configure:
+
 - Linear API key (required)
 - Organization ID (optional)
 - Policy toggles (require work items in commits/PRs)
@@ -157,19 +162,25 @@ npm run publish
 ## 📝 Customization Ideas
 
 ### Enhance Work Item Detection
+
 Edit `src/services/linearService.ts` → `extractWorkItemReferences()` to support:
+
 - Custom team key formats
 - Issue URLs
 - Multiple issue references per commit
 
 ### Add More Validation Rules
+
 In `src/services/linearService.ts` → `validateWorkItem()`:
+
 - Check issue status (e.g., must be "In Progress")
 - Validate assignee
 - Check priority levels
 
 ### Improve UI
+
 Enhance the HTML files in `src/`:
+
 - Add team selector
 - Show recent issues
 - Display issue status and assignees
@@ -177,6 +188,7 @@ Enhance the HTML files in `src/`:
 ## 🐛 Troubleshooting
 
 **Build Errors**
+
 ```powershell
 # Clean and rebuild
 npm run clean
@@ -185,11 +197,13 @@ npm run build
 ```
 
 **Extension Not Loading**
+
 - Verify `vss-extension.json` has correct publisher ID
 - Check browser console for errors
 - Ensure Linear API key is valid
 
 **Linear API Issues**
+
 - Test connection in Settings page
 - Verify API key permissions
 - Check network/firewall settings
