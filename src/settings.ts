@@ -17,16 +17,21 @@ class SettingsPage {
    */
   public async initialize(): Promise<void> {
     try {
-      await SDK.init();
-      await SDK.ready();
+      // Resolve the runtime SDK (imported module, window.SDK, or AMD require)
+      const sdk = await this.resolveSdk();
 
-      // Load existing configuration
-      await this.loadConfiguration();
+      await sdk.init();
+      // Wait for SDK.ready with timeout to avoid hanging indefinitely
+      await this.waitForSdkReady(10000, sdk);
 
-      // Setup UI event handlers
+      // Load existing configuration (don't block UI on failure)
+      this.loadConfiguration().catch(err => {
+        console.warn('Non-fatal: failed to load configuration', err);
+        this.showInfo('Could not load saved settings (will continue).');
+      });
+
+      // Setup UI event handlers and populate form immediately
       this.setupEventHandlers();
-
-      // Populate form
       this.populateForm();
 
     } catch (error) {
@@ -36,22 +41,108 @@ class SettingsPage {
   }
 
   /**
+   * Resolve the Azure DevOps extension SDK at runtime.
+   * Tries in order: imported `SDK` binding, `SDK.default`, `window.SDK`, and AMD `require`.
+   */
+  private resolveSdk(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      try {
+        // 1) Imported SDK (module namespace)
+        if (SDK && typeof (SDK as any).init === 'function') {
+          return resolve(SDK);
+        }
+
+        // 2) Imported default export (some bundlers use default)
+        if (SDK && (SDK as any).default && typeof (SDK as any).default.init === 'function') {
+          return resolve((SDK as any).default);
+        }
+
+        // 3) Global window.SDK exposed by host
+        if (typeof (window as any).SDK !== 'undefined' && typeof (window as any).SDK.init === 'function') {
+          return resolve((window as any).SDK);
+        }
+
+        // 4) AMD require (async)
+        const req = (window as any).require;
+        if (typeof req === 'function') {
+          try {
+            // AMD-style require takes an array and a callback
+            req(['azure-devops-extension-sdk'], (maybe: any) => {
+              if (maybe && typeof maybe.init === 'function') return resolve(maybe);
+              if (maybe && maybe.default && typeof maybe.default.init === 'function') return resolve(maybe.default);
+              return reject(new Error('AMD module loaded but does not expose init()'));
+            }, (err: any) => {
+              return reject(err || new Error('AMD require failed'));
+            });
+            return;
+          } catch (e) {
+            // fallthrough to reject below
+          }
+        }
+
+        return reject(new Error('Azure DevOps extension SDK not available (init not found)'));
+      } catch (e) {
+        return reject(e);
+      }
+    });
+  }
+
+  /**
    * Load configuration from storage
    */
   private async loadConfiguration(): Promise<void> {
-    try {
-      const dataService = await SDK.getService<IExtensionDataService>('ms.vss-features.extension-data-service');
-      const extensionContext = SDK.getExtensionContext();
-      const accessToken = await SDK.getAccessToken();
-      const dataManager = await dataService.getExtensionDataManager(extensionContext.id, accessToken);
-      
-      const savedConfig = await dataManager.getValue('linear-config') as LinearConfig;
-      
-      if (savedConfig) {
-        this.config = { ...this.config, ...savedConfig };
+    // Try to load from extension data service with retries; fallback to localStorage
+    const maxAttempts = 3;
+    const attemptDelay = 1000; // ms
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        this.showInfo(`Loading saved settings (attempt ${attempt}/${maxAttempts})...`);
+        const dataService = await SDK.getService<IExtensionDataService>('ms.vss-features.extension-data-service');
+        this.showInfo('Obtained extension data service');
+
+        const extensionContext = SDK.getExtensionContext();
+        const accessToken = await SDK.getAccessToken();
+        this.showInfo('Got access token');
+
+        const dataManager = await dataService.getExtensionDataManager(extensionContext.id, accessToken);
+        this.showInfo('Obtained data manager');
+
+        const savedConfig = await dataManager.getValue('linear-config') as LinearConfig;
+
+        if (savedConfig) {
+          this.config = { ...this.config, ...savedConfig };
+          this.showSuccess('Loaded saved settings');
+        } else {
+          this.showInfo('No saved settings found');
+        }
+
+        return;
+      } catch (error) {
+        console.warn(`loadConfiguration attempt ${attempt} failed:`, error);
+        // If last attempt, surface friendly error and fallback
+        if (attempt === maxAttempts) {
+          console.error('Failed to load configuration after retries:', error);
+          this.showError('Unable to load saved settings from Azure DevOps. Using local settings if available.');
+
+          // Fallback to localStorage if available
+          try {
+            const raw = localStorage.getItem('linear-config');
+            if (raw) {
+              const local = JSON.parse(raw) as LinearConfig;
+              this.config = { ...this.config, ...local };
+              this.showInfo('Loaded settings from browser storage as fallback');
+            }
+          } catch (err) {
+            console.warn('localStorage fallback failed', err);
+          }
+
+          return;
+        }
+
+        // wait before retrying
+        await this.delay(attempt * attemptDelay);
       }
-    } catch (error) {
-      console.error('Failed to load configuration:', error);
     }
   }
 
@@ -72,6 +163,13 @@ class SettingsPage {
       console.error('Failed to save configuration:', error);
       this.showError('Failed to save settings');
     }
+  }
+
+  /**
+   * Delay helper
+   */
+  private delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   /**
@@ -167,7 +265,25 @@ class SettingsPage {
       this.showSuccess(`Connection successful! Found ${issues.length} issues.`);
     } catch (error) {
       console.error('Connection test failed:', error);
-      this.showError('Connection failed. Please check your API key.');
+      this.showError('Connection failed. Please check your API key or network connectivity.');
+    }
+  }
+
+  /**
+   * Wait for SDK.ready with timeout
+   */
+  private async waitForSdkReady(timeoutMs: number, sdk?: any): Promise<void> {
+    const runtimeSdk = sdk || SDK;
+    const readyPromise = typeof runtimeSdk.ready === 'function' ? runtimeSdk.ready() : Promise.resolve();
+    let timer: any;
+    const timeoutPromise = new Promise<void>((_resolve, reject) => {
+      timer = setTimeout(() => reject(new Error('SDK.ready() timed out')), timeoutMs);
+    });
+
+    try {
+      await Promise.race([readyPromise, timeoutPromise]);
+    } finally {
+      clearTimeout(timer);
     }
   }
 

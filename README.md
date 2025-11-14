@@ -30,7 +30,7 @@ An Azure DevOps Marketplace extension that seamlessly integrates Linear work ite
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/yourusername/linear-azuredevops-sync.git
+   git clone https://github.com/aahajit/linear-azuredevops-sync.git
    cd linear-azuredevops-sync
    ```
 
@@ -201,8 +201,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 For issues, questions, or contributions:
 
-- GitHub Issues: [Report a bug](https://github.com/yourusername/linear-azuredevops-sync/issues)
-- Documentation: [Wiki](https://github.com/yourusername/linear-azuredevops-sync/wiki)
+- GitHub Issues: [Report a bug](https://github.com/aahajit/linear-azuredevops-sync/issues)
+- Documentation: [Wiki](https://github.com/aahajit/linear-azuredevops-sync/wiki)
 
 ## 🎖️ Acknowledgments
 

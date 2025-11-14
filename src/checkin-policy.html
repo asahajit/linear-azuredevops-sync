@@ -56,6 +56,22 @@
         <div class="loading">Validating commits...</div>
     </div>
 
+    <script>
+        // Browser shim for CommonJS/UMD-style bundles that expect Node globals.
+        if (typeof window !== 'undefined') {
+            if (typeof window.module === 'undefined') {
+                window.module = { exports: {} };
+                window.exports = window.module.exports;
+                var module = window.module;
+                var exports = window.exports;
+            }
+            if (typeof window.require === 'undefined') {
+                var require = window.require = function() { return {}; };
+            } else {
+                try { eval('var require = window.require'); } catch (e) {}
+            }
+        }
+    </script>
     <script src="checkin-policy.js"></script>
 </body>
 </html>

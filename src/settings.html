@@ -176,14 +176,16 @@
 
         <div class="section">
             <div class="section-title">Authentication</div>
-            
-            <div class="form-group">
-                <label for="api-key">Linear API Key *</label>
-                <input type="password" id="api-key" placeholder="lin_api_xxxxxxxxxxxxxxxxxx">
-                <div class="help-text">
-                    Get your API key from <a href="https://linear.app/settings/api" target="_blank">Linear Settings → API</a>
-                </div>
-            </div>
+
+            <form id="auth-form">
+              <div class="form-group">
+                  <label for="api-key">Linear API Key *</label>
+                  <input type="password" id="api-key" placeholder="lin_api_xxxxxxxxxxxxxxxxxx" autocomplete="new-password">
+                  <div class="help-text">
+                      Get your API key from <a href="https://linear.app/settings/api" target="_blank">Linear Settings → API</a>
+                  </div>
+              </div>
+            </form>
 
             <div class="form-group">
                 <label for="org-id">Organization ID (Optional)</label>
@@ -220,6 +222,29 @@
         </div>
     </div>
 
+    <script>
+        // Browser shim for CommonJS/UMD-style bundles that expect Node globals.
+        // Provides safe no-op `module`, `exports`, and `require` so UMD wrappers
+        // don't throw `ReferenceError: require is not defined` in Azure DevOps pages.
+        if (typeof window !== 'undefined') {
+            // Declare globals as real variables so UMD wrappers can reference them
+            if (typeof window.module === 'undefined') {
+                window.module = { exports: {} };
+                window.exports = window.module.exports;
+                var module = window.module;
+                var exports = window.exports;
+            }
+            if (typeof window.require === 'undefined') {
+                // Declare `require` as a var so references to the identifier do not throw
+                var require = window.require = function() { return {}; };
+            } else {
+                // ensure a declared var binding exists if window.require was already present
+                try { /* eslint-disable no-eval */
+                    eval('var require = window.require');
+                } catch (e) { /* ignore */ }
+            }
+        }
+    </script>
     <script src="settings.js"></script>
 </body>
 </html>

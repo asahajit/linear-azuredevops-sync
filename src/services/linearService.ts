@@ -1,11 +1,13 @@
-import { LinearClient } from '@linear/sdk';
 import { LinearConfig, LinearWorkItemReference, LinearIssue, ValidationResult } from '../types';
 
 /**
  * Service for interacting with Linear API
  */
 export class LinearService {
-  private client: LinearClient | null = null;
+  // We dynamically import the heavy `@linear/sdk` at runtime to avoid
+  // adding the browser-unfriendly Node-targeted bundle into our main chunks.
+  // This reduces initial parse/eval time (helps avoid long main-thread tasks).
+  private client: any = null;
   private config: LinearConfig | null = null;
 
   /**
@@ -17,9 +19,10 @@ export class LinearService {
     }
     
     this.config = config;
-    this.client = new LinearClient({
-      apiKey: config.apiKey
-    });
+    // Lazy-load the Linear client implementation when needed.
+    // Keep initialization synchronous by creating the client holder now
+    // and creating the real client asynchronously when first used.
+    this.client = { __pendingInit: true, apiKey: config.apiKey };
   }
 
   /**
@@ -58,6 +61,18 @@ export class LinearService {
   public async validateWorkItem(reference: LinearWorkItemReference): Promise<{ isValid: boolean; issue?: LinearIssue; error?: string }> {
     if (!this.client) {
       return { isValid: false, error: 'Linear client not initialized' };
+    }
+
+    // If client is a pending placeholder, perform the dynamic import and construct it now
+    if (this.client && this.client.__pendingInit) {
+      try {
+        const sdk = await import('@linear/sdk');
+        const LinearClient = sdk.LinearClient || (sdk as any).default?.LinearClient || (sdk as any).default;
+        this.client = new LinearClient({ apiKey: this.client.apiKey });
+      } catch (err) {
+        console.error('Failed to load @linear/sdk dynamically:', err);
+        return { isValid: false, error: 'Failed to initialize Linear client' };
+      }
     }
 
     try {

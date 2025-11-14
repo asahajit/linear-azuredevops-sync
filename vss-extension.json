@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "linear-azure-devops-integration",
     "name": "Linear Integration for Azure DevOps",
-    "version": "1.0.0",
+    "version": "1.0.11",
     "publisher": "AsahajitDalui",
     "description": "Link Linear work items to Azure Repos commits and validate references during pull requests and check-ins",
     "categories": [

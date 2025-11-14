@@ -11,6 +11,7 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].js",
     libraryTarget: "umd",
+    chunkFilename: "[name].chunk.js",
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
@@ -37,5 +38,13 @@ module.exports = {
     "azure-devops-extension-sdk": "SDK",
     "azure-devops-extension-api": "API",
   },
-  devtool: "source-map",
+  // Disable source maps for production bundles to avoid external `.map` requests
+  // which are blocked by Azure DevOps Content Security Policy (CSP).
+  devtool: false,
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      minSize: 0,
+    },
+  },
 };

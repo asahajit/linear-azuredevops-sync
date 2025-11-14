@@ -1,11 +1,11 @@
 {
     "name": "linear-azure-devops-integration",
-    "version": "1.0.0",
+    "version": "1.0.11",
     "description": "Azure DevOps extension for Linear integration - link work items and validate during PR and check-in",
     "publisher": "your-publisher-name",
     "repository": {
         "type": "git",
-        "url": "https://github.com/yourusername/linear-azuredevops-sync"
+        "url": "https://github.com/asahajit/linear-azuredevops-sync"
     },
     "engines": {
         "node": ">=16.0.0"
@@ -13,7 +13,7 @@
     "scripts": {
         "build": "webpack --mode production && npm run copy-assets",
         "watch": "webpack --mode development --watch",
-        "copy-assets": "node -e \"require('fs').cpSync('src', 'dist', {recursive: true, filter: (src) => src.endsWith('.html')})\"",
+        "copy-assets": "node ./scripts/copy-assets.js",
         "package": "npm run build && tfx extension create --manifest-globs vss-extension.json",
         "publish": "npm run build && tfx extension publish --manifest-globs vss-extension.json",
         "clean": "rimraf dist"
