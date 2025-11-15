@@ -76,7 +76,14 @@ export class LinearService {
     }
 
     try {
-      const issue = await this.client.issue(reference.issueId);
+      // Search for issue by identifier (e.g., LIN-123)
+      const issues = await this.client.issues({
+        filter: {
+          identifier: { eq: reference.issueId }
+        }
+      });
+      
+      const issue = issues.nodes[0];
       
       if (!issue) {
         return { isValid: false, error: `Issue ${reference.issueId} not found` };

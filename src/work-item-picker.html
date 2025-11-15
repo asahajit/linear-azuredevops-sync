@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Work Item Picker</title>
+    <style>
+        body {
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+
+        .picker-container {
+            padding: 16px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #8a8886;
+            border-radius: 2px;
+            font-size: 14px;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #0078d4;
+            box-shadow: 0 0 0 1px #0078d4;
+        }
+
+        .issues-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #edebe9;
+            border-radius: 2px;
+        }
+
+        .issue-item {
+            padding: 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #edebe9;
+            transition: background-color 0.2s;
+        }
+
+        .issue-item:hover {
+            background-color: #f3f2f1;
+        }
+
+        .issue-item.selected {
+            background-color: #e1f3f8;
+        }
+
+        .issue-identifier {
+            font-weight: 600;
+            color: #0078d4;
+            margin-bottom: 4px;
+        }
+
+        .issue-title {
+            color: #323130;
+            margin-bottom: 4px;
+        }
+
+        .issue-meta {
+            font-size: 12px;
+            color: #605e5c;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #605e5c;
+        }
+
+        .error {
+            padding: 12px;
+            background-color: #fde7e9;
+            color: #a80000;
+            border: 1px solid #a80000;
+            border-radius: 2px;
+            margin-bottom: 12px;
+        }
+
+        .no-results {
+            padding: 20px;
+            text-align: center;
+            color: #605e5c;
+        }
+    </style>
+</head>
+<body>
+    <div class="picker-container">
+        <input 
+            type="text" 
+            id="search-input" 
+            class="search-box" 
+            placeholder="Search Linear issues (or leave empty to see all your issues)..."
+            autocomplete="off"
+        >
+        <div id="issues-container" class="issues-list">
+            <div class="loading">Loading your Linear issues...</div>
+        </div>
+    </div>
+
+    <script src="29.js"></script>
+    <script src="265.js"></script>
+    <script src="work-item-picker.js"></script>
+</body>
+</html>

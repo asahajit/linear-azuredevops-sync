@@ -10,7 +10,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].js",
-    libraryTarget: "umd",
     chunkFilename: "[name].chunk.js",
   },
   resolve: {
@@ -35,7 +34,7 @@ module.exports = {
     ],
   },
   externals: {
-    "azure-devops-extension-sdk": "SDK",
+    // Bundle the SDK instead of treating it as external
     "azure-devops-extension-api": "API",
   },
   // Disable source maps for production bundles to avoid external `.map` requests

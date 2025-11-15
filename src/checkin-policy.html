@@ -11,10 +11,95 @@
             margin: 0;
         }
 
-        .policy-result {
-            padding: 16px;
-            border-radius: 4px;
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-weight: 600;
             margin-bottom: 12px;
+            color: #323130;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 500px;
+            padding: 8px 12px;
+            border: 1px solid #8a8886;
+            border-radius: 2px;
+            font-size: 14px;
+            box-sizing: border-box;
+            margin-bottom: 8px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #0078d4;
+            box-shadow: 0 0 0 1px #0078d4;
+        }
+
+        .dropdown {
+            position: relative;
+            max-width: 500px;
+        }
+
+        .dropdown-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #edebe9;
+            border-radius: 2px;
+            background: white;
+            display: none;
+        }
+
+        .dropdown-list.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #edebe9;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f3f2f1;
+        }
+
+        .issue-identifier {
+            font-weight: 600;
+            color: #0078d4;
+        }
+
+        .issue-title {
+            color: #605e5c;
+            font-size: 13px;
+        }
+
+        .selected-issues {
+            margin-top: 12px;
+        }
+
+        .selected-issue {
+            display: inline-block;
+            padding: 4px 8px;
+            margin: 4px;
+            background-color: #e1f3f8;
+            border-radius: 2px;
+            font-size: 13px;
+        }
+
+        .selected-issue .remove {
+            margin-left: 8px;
+            color: #0078d4;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .policy-result {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 2px;
         }
 
         .policy-result.passed {
@@ -29,49 +114,64 @@
             color: #a80000;
         }
 
-        .policy-result h3 {
-            margin: 0 0 12px 0;
-            font-size: 16px;
-        }
-
-        .policy-result ul {
-            margin: 8px 0 0 0;
-            padding-left: 20px;
-        }
-
-        .policy-result li {
-            margin-bottom: 4px;
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
             font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .btn-primary {
+            background-color: #0078d4;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #106ebe;
+        }
+
+        .help-text {
+            color: #605e5c;
+            font-size: 13px;
+            margin-top: 8px;
         }
 
         .loading {
-            text-align: center;
-            padding: 20px;
             color: #605e5c;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
-    <div id="policy-status">
-        <div class="loading">Validating commits...</div>
+    <div class="section">
+        <div class="section-title">Link Linear Issues to Commit</div>
+        <div class="dropdown">
+            <input 
+                type="text" 
+                id="issue-search" 
+                class="search-box" 
+                placeholder="Search and select Linear issues..."
+                autocomplete="off"
+            >
+            <div id="dropdown-list" class="dropdown-list"></div>
+        </div>
+        <div id="selected-issues" class="selected-issues"></div>
+        <div class="help-text">
+            Selected issues will be included in your commit message format: "Your message [TEAM-123]"
+        </div>
+        <div style="margin-top: 12px;">
+            <button id="copy-reference" class="btn btn-primary">Copy Reference for Commit Message</button>
+        </div>
     </div>
 
-    <script>
-        // Browser shim for CommonJS/UMD-style bundles that expect Node globals.
-        if (typeof window !== 'undefined') {
-            if (typeof window.module === 'undefined') {
-                window.module = { exports: {} };
-                window.exports = window.module.exports;
-                var module = window.module;
-                var exports = window.exports;
-            }
-            if (typeof window.require === 'undefined') {
-                var require = window.require = function() { return {}; };
-            } else {
-                try { eval('var require = window.require'); } catch (e) {}
-            }
-        }
-    </script>
+    <div id="policy-status" class="policy-result">
+        <p class="loading">Validating commits...</p>
+    </div>
+
+    <script src="29.js"></script>
+    <script src="265.js"></script>
     <script src="checkin-policy.js"></script>
 </body>
 </html>

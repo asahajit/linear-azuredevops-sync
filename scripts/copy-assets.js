@@ -13,6 +13,12 @@ function copyHtmlFiles(src, dest) {
   for (const entry of entries) {
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
+
+    // Skip work-item-picker.html
+    if (entry.name === "work-item-picker.html") {
+      continue;
+    }
+
     if (entry.isDirectory()) {
       copyHtmlFiles(srcPath, destPath);
     } else if (entry.isFile() && entry.name.toLowerCase().endsWith(".html")) {

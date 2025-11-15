@@ -168,6 +168,16 @@
     </style>
 </head>
 <body>
+    <script>
+        console.log('[LINEAR] Page loaded, readyState:', document.readyState);
+        console.log('[LINEAR] Script tags:', document.scripts.length);
+        
+        // Listen for script load errors
+        window.addEventListener('error', function(e) {
+            console.error('[LINEAR] Script error:', e.message, e.filename, e.lineno);
+        }, true);
+    </script>
+
     <div class="container">
         <h1>Linear Integration Settings</h1>
         <p class="subtitle">Configure Linear API integration for Azure DevOps</p>
@@ -178,6 +188,7 @@
             <div class="section-title">Authentication</div>
 
             <form id="auth-form">
+              <input type="text" style="display: none;" autocomplete="username">
               <div class="form-group">
                   <label for="api-key">Linear API Key *</label>
                   <input type="password" id="api-key" placeholder="lin_api_xxxxxxxxxxxxxxxxxx" autocomplete="new-password">
@@ -223,28 +234,20 @@
     </div>
 
     <script>
-        // Browser shim for CommonJS/UMD-style bundles that expect Node globals.
-        // Provides safe no-op `module`, `exports`, and `require` so UMD wrappers
-        // don't throw `ReferenceError: require is not defined` in Azure DevOps pages.
-        if (typeof window !== 'undefined') {
-            // Declare globals as real variables so UMD wrappers can reference them
-            if (typeof window.module === 'undefined') {
-                window.module = { exports: {} };
-                window.exports = window.module.exports;
-                var module = window.module;
-                var exports = window.exports;
-            }
-            if (typeof window.require === 'undefined') {
-                // Declare `require` as a var so references to the identifier do not throw
-                var require = window.require = function() { return {}; };
-            } else {
-                // ensure a declared var binding exists if window.require was already present
-                try { /* eslint-disable no-eval */
-                    eval('var require = window.require');
-                } catch (e) { /* ignore */ }
-            }
-        }
+        // Make the form visible immediately (override any hidden styles)
+        console.log('[LINEAR] Making container visible');
+        var containerStyle = document.createElement('style');
+        containerStyle.textContent = '.container { display: block !important; visibility: visible !important; opacity: 1 !important; }';
+        document.head.appendChild(containerStyle);
     </script>
+
+    <script src="29.js"></script>
+    <script src="265.js"></script>
     <script src="settings.js"></script>
+    <script>
+        console.log('[LINEAR] After settings.js script tag');
+        console.log('[LINEAR] SettingsPage available?', typeof SettingsPage !== 'undefined');
+        console.log('[LINEAR] LinearSettings available?', typeof LinearSettings !== 'undefined');
+    </script>
 </body>
 </html>
