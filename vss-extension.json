@@ -2,12 +2,11 @@
     "manifestVersion": 1,
     "id": "linear-azure-devops-integration",
     "name": "Linear Integration for Azure DevOps",
-    "version": "1.0.39",
+    "version": "1.0.52",
     "publisher": "AsahajitDalui",
     "description": "Link Linear work items to Azure Repos commits and validate references during pull requests and check-ins",
     "categories": [
-        "Azure Repos",
-        "Azure Boards"
+        "Azure Repos"
     ],
     "targets": [
         {
@@ -37,21 +36,40 @@
     "scopes": [
         "vso.code",
         "vso.code_write",
-        "vso.work",
-        "vso.work_write",
         "vso.settings"
     ],
     "contributions": [
         {
             "id": "linear-pr-status",
             "type": "ms.vss-code-web.pull-request-status-provider",
-            "description": "Validates Linear work item references in pull requests",
+            "description": "Validates Linear work item references in existing pull requests",
             "targets": [
                 "ms.vss-code-web.pull-request-status-provider"
             ],
             "properties": {
-                "uri": "dist/pr-status.html"
+                "uri": "dist/pr-status.html",
+                "name": "Linear Integration"
             }
+        },
+        {
+            "id": "linear-pr-action",
+            "type": "ms.vss-web.action",
+            "description": "Link Linear issues to pull request",
+            "targets": [
+                "ms.vss-code-web.pull-request-action-menu"
+            ],
+            "properties": {
+                "text": "Link Linear Issues",
+                "title": "Select Linear issues to link",
+                "icon": "images/logo.png",
+                "uri": "dist/pr-create.html",
+                "registeredObjectId": "linear-pr-dialog"
+            }
+        },
+        {
+            "id": "linear-pr-dialog",
+            "type": "ms.vss-web.external-content",
+            "properties": {}
         },
         {
             "id": "linear-checkin-policy",

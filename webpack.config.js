@@ -4,6 +4,7 @@ module.exports = {
   mode: "production",
   entry: {
     "pr-status": "./src/pr-status.ts",
+    "pr-create": "./src/pr-create.ts",
     "checkin-policy": "./src/checkin-policy.ts",
     settings: "./src/settings.ts",
   },

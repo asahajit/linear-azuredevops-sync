@@ -1,6 +1,6 @@
 {
     "name": "linear-azure-devops-integration",
-    "version": "1.0.39",
+    "version": "1.0.52",
     "description": "Azure DevOps extension for Linear integration - link work items and validate during PR and check-in",
     "publisher": "your-publisher-name",
     "repository": {

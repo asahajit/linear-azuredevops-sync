@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Linear Issues</title>
+    <style>
+        body {
+            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Helvetica, Ubuntu, Arial, sans-serif;
+            margin: 0;
+            padding: 16px;
+            background: transparent;
+        }
+        .container {
+            max-width: 600px;
+        }
+        .section {
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #323130;
+        }
+        .search-box {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d1d1;
+            border-radius: 2px;
+            font-size: 14px;
+            box-sizing: border-box;
+            margin-bottom: 8px;
+        }
+        .search-box:focus {
+            outline: none;
+            border-color: #0078d4;
+        }
+        .dropdown-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #d1d1d1;
+            border-radius: 2px;
+            background: white;
+        }
+        .issue-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f2f1;
+            display: flex;
+            align-items: center;
+        }
+        .issue-item:hover {
+            background-color: #f3f2f1;
+        }
+        .issue-item:last-child {
+            border-bottom: none;
+        }
+        .issue-checkbox {
+            margin-right: 8px;
+        }
+        .issue-identifier {
+            font-weight: 600;
+            color: #0078d4;
+            margin-right: 8px;
+        }
+        .issue-title {
+            flex: 1;
+            color: #323130;
+        }
+        .selected-issues {
+            margin-top: 16px;
+            padding: 12px;
+            background-color: #f3f2f1;
+            border-radius: 2px;
+            min-height: 40px;
+        }
+        .selected-issues-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #605e5c;
+            margin-bottom: 8px;
+        }
+        .selected-issue-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            margin: 4px 4px 4px 0;
+            background-color: #0078d4;
+            color: white;
+            border-radius: 2px;
+            font-size: 12px;
+        }
+        .button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 2px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+        .button-primary {
+            background-color: #0078d4;
+            color: white;
+        }
+        .button-primary:hover {
+            background-color: #106ebe;
+        }
+        .button-primary:disabled {
+            background-color: #f3f2f1;
+            color: #a19f9d;
+            cursor: not-allowed;
+        }
+        .loading {
+            color: #605e5c;
+            padding: 12px;
+            text-align: center;
+        }
+        .error {
+            color: #a80000;
+            padding: 12px;
+            background-color: #fde7e9;
+            border-radius: 2px;
+            margin-bottom: 12px;
+        }
+        .help-text {
+            font-size: 12px;
+            color: #605e5c;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="margin-top: 0; color: #0078d4;">Linear Issues</h2>
+        <div class="section">
+            <div class="section-title">Link Linear Issues</div>
+            <div class="help-text">Search and select Linear issues to add to your PR description</div>
+            <input type="text" class="search-box" id="search-box" placeholder="Search Linear issues...">
+            <div class="dropdown-list" id="dropdown-list">
+                <div class="loading">Loading Linear issues...</div>
+            </div>
+        </div>
+        
+        <div class="selected-issues" id="selected-issues">
+            <div class="selected-issues-title">Selected Issues (0)</div>
+        </div>
+
+        <button class="button button-primary" id="copy-button" disabled>Copy References for PR Description</button>
+    </div>
+
+    <script src="29.js"></script>
+    <script src="265.js"></script>
+    <script src="pr-create.js"></script>
+</body>
+</html>

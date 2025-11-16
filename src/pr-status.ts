@@ -24,11 +24,22 @@ class PRStatusProvider {
 
       // Check if we're in a valid PR context
       const config = SDK.getConfiguration();
-      if (!config || !config.pullRequestId) {
-        console.log('Not in a PR context, skipping initialization');
-        this.showContextMessage('This extension works within Pull Requests. Open a PR to see Linear issue linking.');
-        SDK.notifyLoadSucceeded();
-        return;
+      
+      // Show UI for both PR creation and existing PRs
+      const isNewPR = !config || !config.pullRequestId || config.pullRequestId === 0;
+      console.log('PR context:', { isNewPR, pullRequestId: config?.pullRequestId });
+      
+      if (isNewPR) {
+        // On PR creation page, show simplified UI for linking issues
+        console.log('PR creation page - showing issue selector');
+        // Update UI text for creation mode
+        const addButton = document.getElementById('add-to-pr') as HTMLButtonElement;
+        if (addButton) {
+          addButton.textContent = 'Copy References for PR Description';
+          addButton.addEventListener('click', () => this.copyReferencesToClipboard());
+        }
+      } else {
+        console.log('Existing PR page - showing full UI with validation');
       }
 
       // Get the Git REST client
@@ -214,8 +225,24 @@ class PRStatusProvider {
    * Add selected issues to PR description
    */
   private async addIssuesToPR(): Promise<void> {
-    if (this.selectedIssues.size === 0 || !this.gitClient || !this.currentPR) {
+    if (this.selectedIssues.size === 0) {
       alert('Please select at least one issue');
+      return;
+    }
+
+    // Check if we're on PR creation page (no existing PR)
+    const config = SDK.getConfiguration();
+    const isNewPR = !config || !config.pullRequestId || config.pullRequestId === 0;
+    
+    if (isNewPR) {
+      // On creation page, copy to clipboard instead
+      await this.copyReferencesToClipboard();
+      return;
+    }
+
+    // On existing PR page, update PR description
+    if (!this.gitClient || !this.currentPR) {
+      alert('PR context not available');
       return;
     }
 
@@ -226,7 +253,6 @@ class PRStatusProvider {
         : issueLinks;
 
       // Update PR with proper object spread
-      const context = SDK.getConfiguration();
       const updatedPR = {
         ...this.currentPR,
         description: newDescription
@@ -234,9 +260,9 @@ class PRStatusProvider {
       
       await this.gitClient.updatePullRequest(
         updatedPR,
-        context.repositoryId,
+        config.repositoryId,
         this.currentPR.pullRequestId,
-        context.projectId
+        config.projectId
       );
 
       this.selectedIssues.clear();
@@ -249,6 +275,34 @@ class PRStatusProvider {
     } catch (error) {
       console.error('Failed to update PR:', error);
       alert('Failed to add issues to PR. Please try again.');
+    }
+  }
+
+  /**
+   * Copy issue references to clipboard
+   */
+  private async copyReferencesToClipboard(): Promise<void> {
+    if (this.selectedIssues.size === 0) {
+      return;
+    }
+
+    const references = Array.from(this.selectedIssues).map(id => `Linear: ${id}`).join(', ');
+    
+    try {
+      await navigator.clipboard.writeText(references);
+      const button = document.getElementById('add-to-pr') as HTMLButtonElement;
+      if (button) {
+        const originalText = button.textContent;
+        button.textContent = '✓ Copied to Clipboard!';
+        button.style.backgroundColor = '#107c10';
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.style.backgroundColor = '';
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Failed to copy to clipboard:', error);
+      alert('Failed to copy to clipboard');
     }
   }
 
